@@ -18,4 +18,12 @@ export class UsersService {
   async findByEmail(email: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ email }).exec();
   }
+
+  async findByIdentifier(identifier: string): Promise<UserDocument | null> {
+    return this.userModel
+      .findOne({
+        $or: [{ username: identifier }, { email: identifier }],
+      })
+      .exec();
+  }
 }
