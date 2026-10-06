@@ -33,7 +33,7 @@ const stats = [
 function Dashboard() {
   return (
     <Box>
-      <Typography variant="h4" fontWeight={700}>
+      <Typography variant="h4" sx={{ fontWeight: 700 }}>
         Enterprise ERP
       </Typography>
 
@@ -65,7 +65,7 @@ function Dashboard() {
                       {stat.title}
                     </Typography>
 
-                    <Typography variant="h4" fontWeight={700} sx={{ mt: 1 }}>
+                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
                       {stat.value}
                     </Typography>
                   </Box>

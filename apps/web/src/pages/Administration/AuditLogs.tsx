@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 function AuditLogs() {
   return (
     <Box>
-      <Typography variant="h4" fontWeight={700}>
+      <Typography variant="h4" sx={{ fontWeight: 700 }}>
         Audit Logs
       </Typography>
 

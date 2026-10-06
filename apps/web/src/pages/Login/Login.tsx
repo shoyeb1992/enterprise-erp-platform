@@ -15,39 +15,29 @@ import {
   Typography,
 } from "@mui/material";
 
-import api from "../../services/api";
+import { useLoginMutation } from "../../features/auth/authApi";
+import { setCredentials } from "../../features/auth/authSlice";
+import { useAppDispatch } from "../../app/hooks";
 
 const loginSchema = z.object({
   usernameOrEmail: z.string().min(1, "Username or email is required"),
-
   password: z.string().min(1, "Password is required"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-interface LoginResponse {
-  success: boolean;
-  message: string;
-  data: {
-    accessToken: string;
-    user: {
-      id: string;
-      name: string;
-      username: string;
-      email: string;
-      role: string;
-    };
-  };
-}
-
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [serverError, setServerError] = useState("");
+
+  const [login, { isLoading }] = useLoginMutation();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
@@ -56,20 +46,21 @@ function Login() {
     setServerError("");
 
     try {
-      const response = await api.post<LoginResponse>("/auth/login", data);
-
-      const result = response.data;
+      const result = await login(data).unwrap();
 
       if (result.success) {
-        localStorage.setItem("accessToken", result.data.accessToken);
+        const { accessToken, user } = result.data;
 
-        localStorage.setItem("user", JSON.stringify(result.data.user));
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        dispatch(setCredentials(user));
 
         navigate("/dashboard", { replace: true });
       }
     } catch (error: any) {
       setServerError(
-        error.response?.data?.message || "Invalid username/email or password",
+        error?.data?.message || "Invalid username/email or password",
       );
     }
   };
@@ -92,14 +83,23 @@ function Login() {
         }}
       >
         <CardContent sx={{ p: 4 }}>
-          <Typography variant="h4" fontWeight={700} textAlign="center">
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              textAlign: "center",
+            }}
+          >
             Enterprise ERP
           </Typography>
 
           <Typography
             color="text.secondary"
-            textAlign="center"
-            sx={{ mt: 1, mb: 4 }}
+            sx={{
+              mt: 1,
+              mb: 2,
+              textAlign: "center",
+            }}
           >
             Sign in to your account
           </Typography>
@@ -119,6 +119,7 @@ function Login() {
               error={!!errors.usernameOrEmail}
               helperText={errors.usernameOrEmail?.message}
             />
+
             <TextField
               fullWidth
               type="password"
@@ -134,10 +135,10 @@ function Login() {
               fullWidth
               variant="contained"
               size="large"
-              disabled={isSubmitting}
+              disabled={isLoading}
               sx={{ mt: 3 }}
             >
-              {isSubmitting ? (
+              {isLoading ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
                 "Sign In"

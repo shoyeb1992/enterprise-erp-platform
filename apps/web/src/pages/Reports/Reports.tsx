@@ -3,7 +3,7 @@ import { Box, Card, CardContent, Typography } from "@mui/material";
 function Reports() {
   return (
     <Box>
-      <Typography variant="h4" fontWeight={700} gutterBottom>
+      <Typography variant="h4" sx={{ fontWeight: 700 }} gutterBottom>
         Reports
       </Typography>
 

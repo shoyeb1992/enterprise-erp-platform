@@ -8,7 +8,6 @@ import {
   Logout,
   People,
   PointOfSale,
-  ReceiptLong,
   Settings,
   ShoppingCart,
 } from "@mui/icons-material";
@@ -80,7 +79,7 @@ function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <Toolbar>
         <Box>
-          <Typography variant="h6" fontWeight={800}>
+          <Typography variant="h6" sx={{ fontWeight: 800 }}>
             ENTERPRISE ERP
           </Typography>
 

@@ -98,12 +98,9 @@ function Topbar({ onMenuClick }: TopbarProps) {
 
         <Typography
           variant="h6"
-          fontWeight={700}
           sx={{
-            display: {
-              xs: "none",
-              sm: "block",
-            },
+            fontWeight: 700,
+            display: { xs: "none", sm: "block" },
           }}
         >
           Dashboard
@@ -133,7 +130,7 @@ function Topbar({ onMenuClick }: TopbarProps) {
             mr: 1,
           }}
         >
-          <Typography variant="body2" fontWeight={600}>
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>
             {user?.name || "User"}
           </Typography>
 
